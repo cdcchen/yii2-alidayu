@@ -21,17 +21,22 @@ use yii\base\InvalidConfigException;
 class Client extends Component
 {
     /**
-     * @var
+     * @var string
      */
     public $appKey;
     /**
-     * @var
+     * @var string
      */
     public $appSecret;
     /**
      * @var string
      */
     public $format = 'json';
+
+    /**
+     * @var string|null
+     */
+    public $gatewayUrl;
 
     /**
      * @throws InvalidConfigException
@@ -107,6 +112,10 @@ class Client extends Component
             $client->setFormat($this->format);
         }
 
+        if ($this->gatewayUrl) {
+            $client->setGatewayUrl($this->gatewayUrl);
+        }
+
         return $client;
     }
 
@@ -118,6 +127,10 @@ class Client extends Component
         $client = new SmsQueryClient($this->appKey, $this->appSecret);
         if ($this->format) {
             $client->setFormat($this->format);
+        }
+
+        if ($this->gatewayUrl) {
+            $client->setGatewayUrl($this->gatewayUrl);
         }
 
         return $client;
