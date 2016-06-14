@@ -9,8 +9,9 @@
 namespace cdcchen\yii\alidayu;
 
 
-use cdcchen\alidayu\SmsQueryClient;
-use cdcchen\alidayu\SmsSendClient;
+use cdcchen\alidayu\Client as DayuClient;
+use cdcchen\alidayu\SmsQueryRequest;
+use cdcchen\alidayu\SmsSendRequest;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
 
@@ -38,6 +39,8 @@ class Client extends Component
      */
     public $restUrl;
 
+    private $_client;
+
     /**
      * @throws InvalidConfigException
      */
@@ -55,6 +58,25 @@ class Client extends Component
     }
 
     /**
+     * @return DayuClient
+     */
+    public function getDayuClient()
+    {
+        if ($this->_client === null) {
+            $this->_client = new DayuClient($this->appKey, $this->appSecret);
+            if ($this->format) {
+                $this->_client->setFormat($this->format);
+            }
+
+            if ($this->restUrl) {
+                $this->_client->setRestUrl($this->restUrl);
+            }
+        }
+
+        return $this->_client;
+    }
+
+    /**
      * @param string|array $receiveNumber
      * @param string $freeSignName
      * @param string $templateCode
@@ -64,18 +86,19 @@ class Client extends Component
      */
     public function sendSms($receiveNumber, $freeSignName, $templateCode, $params = null, $extend = null)
     {
-        $client = $this->createSmsSendClient()
-                       ->setReceiveNumber($receiveNumber)
-                       ->setSmsFreeSignName($freeSignName)
-                       ->setSmsTemplateCode($templateCode);
+        $client = $this->getDayuClient();
+        $request = new SmsSendRequest();
+        $request->setReceiveNumber($receiveNumber)
+                ->setSmsFreeSignName($freeSignName)
+                ->setSmsTemplateCode($templateCode);
 
         if ($params) {
-            $client->setSmsParams($params);
+            $request->setSmsParams($params);
         }
         if ($extend) {
-            $client->setExtend($extend);
+            $request->setExtend($extend);
         }
-        return $client->execute();
+        return $client->execute($request);
     }
 
     /**
@@ -88,51 +111,17 @@ class Client extends Component
      */
     public function querySms($receiveNumber, $date, $currentPage = 1, $pageSize = 20, $bizId = null)
     {
-        $client = $this->createSmsQueryClient()
-                       ->setReceiveNumber($receiveNumber)
-                       ->setQueryDate($date)
-                       ->setCurrentPage($currentPage)
-                       ->setPageSize($pageSize);
+        $client = $this->getDayuClient();
+        $request = new SmsQueryRequest();
+        $request->setReceiveNumber($receiveNumber)
+                ->setQueryDate($date)
+                ->setCurrentPage($currentPage)
+                ->setPageSize($pageSize);
 
         if ($bizId) {
-            $client->setBizId($bizId);
+            $request->setBizId($bizId);
         }
 
-        return $client->execute();
-
-    }
-
-    /**
-     * @return SmsSendClient
-     */
-    public function createSmsSendClient()
-    {
-        $client = new SmsSendClient($this->appKey, $this->appSecret);
-        if ($this->format) {
-            $client->setFormat($this->format);
-        }
-
-        if ($this->restUrl) {
-            $client->setGatewayUrl($this->restUrl);
-        }
-
-        return $client;
-    }
-
-    /**
-     * @return SmsQueryClient
-     */
-    public function createSmsQueryClient()
-    {
-        $client = new SmsQueryClient($this->appKey, $this->appSecret);
-        if ($this->format) {
-            $client->setFormat($this->format);
-        }
-
-        if ($this->restUrl) {
-            $client->setGatewayUrl($this->restUrl);
-        }
-
-        return $client;
+        return $client->execute($request);
     }
 }
