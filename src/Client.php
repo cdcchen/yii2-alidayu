@@ -36,7 +36,7 @@ class Client extends Component
     /**
      * @var string|null
      */
-    public $gatewayUrl;
+    public $restUrl;
 
     /**
      * @throws InvalidConfigException
@@ -112,8 +112,8 @@ class Client extends Component
             $client->setFormat($this->format);
         }
 
-        if ($this->gatewayUrl) {
-            $client->setGatewayUrl($this->gatewayUrl);
+        if ($this->restUrl) {
+            $client->setGatewayUrl($this->restUrl);
         }
 
         return $client;
@@ -129,8 +129,8 @@ class Client extends Component
             $client->setFormat($this->format);
         }
 
-        if ($this->gatewayUrl) {
-            $client->setGatewayUrl($this->gatewayUrl);
+        if ($this->restUrl) {
+            $client->setGatewayUrl($this->restUrl);
         }
 
         return $client;
