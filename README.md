@@ -18,11 +18,11 @@ $client = Yii::$app->get('alidayu');
 $esponse = $client->sendSms('手机号', '短信签名', '短信模板代码', '模板参数', '回传参数');
 if ($response->isOK()) {
     // success data
-    $data = $result->toArray();
+    $data = $result->getData();
 }
 else {
     // error data
-    $data = $result->toArray();
+    $data = $result->getData();
 }
 ```
 
@@ -38,11 +38,11 @@ $client = Yii::$app->get('alidayu');
 $response = $client->querySms('186xxxxxxxx', '日期', '当前页码', '每页条数', '流水号');
 if ($response->isOK()) {
     // success data
-    $data = $result->toArray();
+    $data = $result->getData();
 }
 else {
     // error data
-    $data = $result->toArray();
+    $data = $result->getData();
 }
 ```
 
