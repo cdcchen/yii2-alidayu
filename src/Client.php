@@ -82,7 +82,8 @@ class Client extends Component
      * @param string $templateCode
      * @param null|array|string $params
      * @param null|string $extend
-     * @return bool|\cdcchen\alidayu\ErrorResponse|\cdcchen\alidayu\SmsSendResponse
+     * @return bool|\cdcchen\alidayu\SmsSendResponse
+     * @throws \cdcchen\alidayu\ResponseException
      */
     public function sendSms($receiveNumber, $freeSignName, $templateCode, $params = null, $extend = null)
     {
@@ -107,7 +108,8 @@ class Client extends Component
      * @param int $currentPage
      * @param int $pageSize
      * @param null|string $bizId
-     * @return bool|\cdcchen\alidayu\ErrorResponse|\cdcchen\alidayu\SmsQueryResponse
+     * @return bool|\cdcchen\alidayu\SmsQueryResponse
+     * @throws \cdcchen\alidayu\ResponseException
      */
     public function querySms($receiveNumber, $date, $currentPage = 1, $pageSize = 20, $bizId = null)
     {
