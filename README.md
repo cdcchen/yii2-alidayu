@@ -15,7 +15,7 @@
 ```php
 /* @var \cdcchen\yii\alidayu\Client $client */
 $client = Yii::$app->get('alidayu');
-$esponse = $client->sendSms('手机号', '短信签名', '短信模板代码', '模板参数', '回传参数');
+$response = $client->sendSms('手机号', '短信签名', '短信模板代码', '模板参数', '回传参数');
 if ($response->isOK()) {
     // success data
     $data = $result->getData();
